@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 🟢 COMENTARIO: Aquí puedes cambiar el título que aparece en la pestaña del navegador -->
+    <title>Gil ROM Store | Recargas y Servicios Free Fire</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome para Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- 🟢 COMENTARIO: Favicon (Foto de la pestaña). Asegúrate de que tu archivo se llame logo.jpg -->
+    <link id="favicon" rel="icon" type="image/jpeg" href="./img/logo/logo.jpg">
+
+    <!-- 🟢 COMENTARIO: Configuración de colores personalizados (Naranja y Amarillo) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ff: {
+                            orange: '#ff5e00',
+                            yellow: '#ffcc00',
+                            dark: '#111827',
+                            card: '#1f2937'
+                        }
+                    },
+                    fontFamily: {
+                        gamer: ['Teko', 'sans-serif'],
+                        body: ['Rajdhani', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* 🟢 COMENTARIO: Estilos visuales de la página (Fuentes, animaciones y colores base) */
+        body { font-family: 'Rajdhani', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        h1, h2, h3, .font-gamer { font-family: 'Teko', sans-serif; letter-spacing: 1px; }
+        
+        #intro-screen { transition: opacity 0.8s ease, visibility 0.8s; }
+        .fade-out { opacity: 0; visibility: hidden; }
+
+        .neon-text { text-shadow: 0 0 10px #ff5e00, 0 0 20px #ff5e00; }
+        .neon-border { box-shadow: 0 0 10px #ff5e0055, inset 0 0 10px #ff5e0055; }
+        .hover-neon:hover { box-shadow: 0 0 15px #ff5e00, inset 0 0 10px #ff5e00; border-color: #ff5e00; }
+
+        .flip-card { background-color: transparent; perspective: 1000px; cursor: pointer; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 0.75rem; overflow: hidden; }
+        .flip-card-front { background-color: #1f2937; }
+        .flip-card-back { background-color: #111827; transform: rotateY(180deg); border: 2px solid #ff5e00; display: flex; flex-direction: column; overflow-y: auto; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #111827; }
+        ::-webkit-scrollbar-thumb { background: #ff5e00; border-radius: 3px; }
+
+        .modal-overlay { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-content { transform: scale(0.9); transition: transform 0.3s ease; }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col relative pb-20">
+
+    <!-- ============================================== -->
+    <!-- 🟢 PANTALLA DE PRESENTACIÓN (Intro)            -->
+    <!-- Aquí puedes cambiar el texto inicial que ve    -->
+    <!-- el cliente al entrar a la página.              -->
+    <!-- ============================================== -->
+    <div id="intro-screen" class="fixed inset-0 z-50 bg-ff-dark flex flex-col items-center justify-center">
+        <div class="text-center animate-pulse">
+            <!-- 🟢 COMENTARIO: LOGO EN LA PRESENTACIÓN. Ruta: ./img/logo/logo.jpg -->
+            <img src="./img/logo/logo.jpg" alt="Gil ROM Store Logo" onerror="this.outerHTML='<h1 class=\'text-6xl font-gamer text-ff-orange neon-text mb-4\'>GIL ROM STORE</h1>'" class="w-48 h-48 mx-auto mb-6 rounded-full object-cover border-4 border-ff-orange shadow-[0_0_20px_#ff5e00]">
+            
+            <!-- 🟢 COMENTARIO: Título de bienvenida -->
+            <h2 class="text-3xl font-gamer text-white tracking-widest uppercase mb-2">Tu mejor opción en Free Fire</h2>
+            
+            <!-- 🟢 COMENTARIO: Descripción de bienvenida -->
+            <p class="text-gray-400 text-lg mb-8 max-w-md px-4">Recargas rápidas, seguras y al mejor precio para dominar el campo de batalla.</p>
+            
+            <!-- 🟢 COMENTARIO: Botón de entrada -->
+            <button onclick="cerrarIntro()" class="bg-gradient-to-r from-ff-orange to-red-600 text-white font-bold py-3 px-8 rounded-full text-xl hover:scale-105 transition-transform neon-border">
+                ENTRAR A LA TIENDA
+            </button>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 🟢 BOTONES FLOTANTES (WhatsApp y Carrito)      -->
+    <!-- ============================================== -->
+    <div class="fixed right-0 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-4 pr-2">
+        <!-- 🟢 COMENTARIO: Link directo del Botón flotante de WhatsApp. Cambia el número después de "wa.me/" -->
+        <a href="https://wa.me/527228500410" target="_blank" class="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center text-white text-3xl shadow-[0_0_15px_rgba(34,197,94,0.6)] hover:scale-110 transition-transform relative group">
+            <i class="fab fa-whatsapp"></i>
+            <span class="absolute right-16 bg-black text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap transition-opacity pointer-events-none">Soporte WhatsApp</span>
+        </a>
+        <!-- Botón del Carrito -->
+        <button onclick="abrirModal('modal-carrito')" class="w-14 h-14 bg-ff-orange rounded-full flex items-center justify-center text-white text-2xl shadow-[0_0_15px_rgba(255,94,0,0.6)] hover:scale-110 transition-transform relative group">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="cart-badge" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center hidden">0</span>
+            <span class="absolute right-16 bg-black text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap transition-opacity pointer-events-none">Ver Carrito</span>
+        </button>
+    </div>
+
+    <!-- HEADER (Barra de arriba) -->
+    <header class="bg-gray-900 border-b border-ff-orange/30 sticky top-0 z-30 shadow-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <!-- 🟢 COMENTARIO: LOGO EN LA BARRA SUPERIOR. Ruta: ./img/logo/logo.jpg -->
+                <img src="./img/logo/logo.jpg" alt="Logo" onerror="this.style.display='none'" class="w-12 h-12 rounded-full object-cover border-2 border-ff-orange shadow-[0_0_10px_#ff5e00]">
+                <h1 class="text-3xl font-gamer text-white tracking-wider"><span class="text-ff-orange">GIL ROM</span> STORE</h1>
+            </div>
+            <div class="hidden md:flex gap-4">
+                <a href="#catalogo" class="text-gray-300 hover:text-ff-orange transition font-bold uppercase">Catálogo</a>
+                <a href="#contacto" class="text-gray-300 hover:text-ff-orange transition font-bold uppercase">Contacto</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================== -->
+    <!-- 🟢 SECCIÓN PRINCIPAL (HERO)                    -->
+    <!-- Imagen de fondo principal y eslogan.           -->
+    <!-- ============================================== -->
+    <section class="relative bg-[url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center py-20">
+        <div class="absolute inset-0 bg-gray-900/80 bg-gradient-to-b from-transparent to-gray-900"></div>
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <h2 class="text-5xl md:text-7xl font-gamer text-white mb-4 uppercase neon-text">Equípate para el <span class="text-ff-yellow">Booyah!</span></h2>
+            <!-- 🟢 COMENTARIO: Texto descriptivo del banner principal -->
+            <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-8 font-semibold">Ofrecemos el servicio más seguro y rápido en recargas de diamantes, pases y artículos exclusivos. Tu cuenta en las mejores manos.</p>
+            <a href="#catalogo" class="inline-block bg-ff-orange hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-lg text-xl transition-all shadow-[0_0_20px_rgba(255,94,0,0.4)]">VER PRODUCTOS</a>
+        </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- 🟢 CATÁLOGO DE PRODUCTOS                       -->
+    <!-- Aquí se cambian imágenes, nombres y precios.   -->
+    <!-- ============================================== -->
+    <main id="catalogo" class="flex-grow container mx-auto px-4 py-16">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-gamer text-white uppercase inline-block border-b-4 border-ff-orange pb-2">Nuestros Servicios</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <!-- 🟢 1. RECARGAS DE DIAMANTES (Flip Card) -->
+            <div class="flip-card h-96 group" onclick="this.classList.toggle('flipped')">
+                <div class="flip-card-inner shadow-xl rounded-xl">
+                    <!-- Frente de la Tarjeta -->
+                    <div class="flip-card-front bg-ff-card border border-gray-700 flex flex-col">
+                        <!-- 🟢 Imagen del producto: cambia el './img/d.jpg' -->
+                        <img src="./img/d.jpg" onerror="this.src='https://images.unsplash.com/photo-1614680376593-902f74cf0d41?auto=format&fit=crop&w=500&q=80'" alt="Diamantes" class="h-48 w-full object-cover rounded-t-xl opacity-80 group-hover:opacity-100 transition">
+                        <div class="p-6 flex-grow flex flex-col justify-center">
+                            <!-- 🟢 Título y descripción de la tarjeta frontal -->
+                            <h3 class="text-2xl font-gamer text-ff-orange uppercase mb-2">Recargas de Diamantes</h3>
+                            <p class="text-gray-400 text-sm">Recargas directas por ID. Entrega inmediata.</p>
+                            <div class="mt-4 text-ff-yellow animate-pulse text-sm font-bold flex items-center justify-center gap-2">
+                                <i class="fas fa-hand-pointer"></i> Toca para ver precios
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Reverso de la Tarjeta (PRECIOS) -->
+                    <div class="flip-card-back p-4 relative" onclick="event.stopPropagation()">
+                        <button onclick="this.closest('.flip-card').classList.remove('flipped')" class="absolute top-2 right-2 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+                        <h3 class="text-2xl font-gamer text-ff-orange uppercase mb-4 border-b border-gray-700 pb-2">Selecciona un Paquete</h3>
+                        <div class="flex flex-col gap-2 overflow-y-auto pr-2 pb-2">
+                            <!-- 🟢 COMENTARIO PARA CAMBIAR PRECIOS EN CÓDIGO JS Y VISUALMENTE:
+                                 1. Cambia el número en prepararCompra('Nombre', PRECIO_AQUI).
+                                 2. Cambia el precio visual en la etiqueta <span class="... font-bold">$PRECIO_AQUI</span> -->
+                            <button onclick="prepararCompra('Recarga Diamantes - 110', 19)" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded p-2 flex justify-between items-center transition"><span>110 <i class="far fa-gem text-blue-400"></i></span> <span class="text-green-400 font-bold">$19</span></button>
+                            <button onclick="prepararCompra('Recarga Diamantes - 341', 60)" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded p-2 flex justify-between items-center transition"><span>341 <i class="far fa-gem text-blue-400"></i></span> <span class="text-green-400 font-bold">$60</span></button>
+                            <button onclick="prepararCompra('Recarga Diamantes - 572', 95)" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded p-2 flex justify-between items-center transition"><span>572 <i class="far fa-gem text-blue-400"></i></span> <span class="text-green-400 font-bold">$95</span></button>
+                            <button onclick="prepararCompra('Recarga Diamantes - 1166', 185)" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded p-2 flex justify-between items-center transition"><span>1166 <i class="far fa-gem text-blue-400"></i></span> <span class="text-green-400 font-bold">$185</span></button>
+                            <button onclick="prepararCompra('Recarga Diamantes - 2398', 360)" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded p-2 flex justify-between items-center transition"><span>2398 <i class="far fa-gem text-blue-400"></i></span> <span class="text-green-400 font-bold">$360</span></button>
+                            <button onclick="prepararCompra('Recarga Diamantes - 6160', 780)" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded p-2 flex justify-between items-center transition"><span>6160 <i class="far fa-gem text-blue-400"></i></span> <span class="text-green-400 font-bold">$780</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🟢 2. DIAMANTES 1 VEZ POR ID (Flip Card) -->
+            <div class="flip-card h-96 group" onclick="this.classList.toggle('flipped')">
+                <div class="flip-card-inner shadow-xl rounded-xl">
+                    <div class="flip-card-front bg-ff-card border border-gray-700 flex flex-col">
+                        <img src="./img/una.jpg" onerror="this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=500&q=80'" alt="1 vez por id" class="h-48 w-full object-cover rounded-t-xl opacity-80 group-hover:opacity-100 transition">
+                        <div class="p-6 flex-grow flex flex-col justify-center">
+                            <h3 class="text-2xl font-gamer text-ff-orange uppercase mb-2">Diamantes 1 Vez por ID</h3>
+                            <p class="text-gray-400 text-sm">Promo especial válida solo una vez por cuenta.</p>
+                            <div class="mt-4 text-ff-yellow animate-pulse text-sm font-bold flex items-center justify-center gap-2">
+                                <i class="fas fa-hand-pointer"></i> Toca para ver precios
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card-back p-4 relative" onclick="event.stopPropagation()">
+                        <button onclick="this.closest('.flip-card').classList.remove('flipped')" class="absolute top-2 right-2 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+                        <h3 class="text-2xl font-gamer text-ff-orange uppercase mb-4 border-b border-gray-700 pb-2">Selecciona Promo 1 Vez</h3>
+                        <div class="flex flex-col gap-2 overflow-y-auto pr-2 pb-2">
+                            <!-- 🟢 COMENTARIO: Igual que arriba, edita el precio real (en el paréntesis) y el visual (en el span) -->
+                            <button onclick="prepararCompra('Promo 1Vez - 110', 18)" class="bg-gray-800 hover:bg-gray-700 border border-purple-500 rounded p-2 flex justify-between items-center transition"><span>110 <i class="far fa-gem text-blue-400"></i></span> <span class="text-green-400 font-bold">$18</span></button>
+                            <button onclick="prepararCompra('Promo 1Vez - 341', 55)" class="bg-gray-800 hover:bg-gray-700 border border-purple-500 rounded p-2 flex justify-between items-center transition"><span>341 <i class="far fa-gem text-blue-400"></i></span> <span class="text-green-400 font-bold">$55</span></button>
+                            <button onclick="prepararCompra('Promo 1Vez - 572', 90)" class="bg-gray-800 hover:bg-gray-700 border border-purple-500 rounded p-2 flex justify-between items-center transition"><span>572 <i class="far fa-gem text-blue-400"></i></span> <span class="text-green-400 font-bold">$90</span></button>
+                            <button onclick="prepararCompra('Promo 1Vez - 1166', 155)" class="bg-gray-800 hover:bg-gray-700 border border-purple-500 rounded p-2 flex justify-between items-center transition"><span>1166 <i class="far fa-gem text-blue-400"></i></span> <span class="text-green-400 font-bold">$155</span></button>
+                            <button onclick="prepararCompra('Promo 1Vez - 2398', 250)" class="bg-gray-800 hover:bg-gray-700 border border-purple-500 rounded p-2 flex justify-between items-center transition"><span>2398 <i class="far fa-gem text-blue-400"></i></span> <span class="text-green-400 font-bold">$250</span></button>
+                            <button onclick="prepararCompra('Promo 1Vez - 6160', 575)" class="bg-gray-800 hover:bg-gray-700 border border-purple-500 rounded p-2 flex justify-between items-center transition"><span>6160 <i class="far fa-gem text-blue-400"></i></span> <span class="text-green-400 font-bold">$575</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🟢 3. FRAGMENTOS DE ARMAS EVOLUTIVAS -->
+            <div class="bg-ff-card border border-gray-700 rounded-xl overflow-hidden hover:border-ff-orange transition-colors group flex flex-col h-96">
+                <!-- 🟢 Imagen del producto -->
+                <img src="./img/frag.jpg" onerror="this.src='https://images.unsplash.com/photo-1589241062272-c0a1f4360011?auto=format&fit=crop&w=500&q=80'" alt="Fragmentos" class="h-48 w-full object-cover opacity-80 group-hover:opacity-100 transition">
+                <div class="p-6 flex-grow flex flex-col justify-between">
+                    <div>
+                        <!-- 🟢 Título y descripción -->
+                        <h3 class="text-2xl font-gamer text-ff-orange uppercase mb-1">Fragmentos Evolutivos</h3>
+                        <p class="text-gray-400 text-sm">Mejora tus armas al máximo nivel.</p>
+                    </div>
+                    <div class="flex justify-between items-center mt-4">
+                        <!-- 🟢 Precio visual -->
+                        <span class="text-xl font-bold text-green-400">$0.85 <span class="text-xs text-gray-500 font-normal">c/u</span></span>
+                        <!-- 🟢 Precio real para el carrito (en este caso 0.85) -->
+                        <button onclick="prepararCompra('Fragmentos Evolutivos', 0.85)" class="bg-ff-orange hover:bg-orange-600 text-white px-4 py-2 rounded font-bold uppercase text-sm flex items-center gap-2"><i class="fas fa-cart-plus"></i> Comprar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🟢 4. CAJAS DE ARMA EVOLUTIVA -->
+            <div class="bg-ff-card border border-gray-700 rounded-xl overflow-hidden hover:border-ff-orange transition-colors group flex flex-col h-96">
+                <img src="./img/c.jpg" onerror="this.src='https://images.unsplash.com/photo-1563207153-f403bf289096?auto=format&fit=crop&w=500&q=80'" alt="Cajas" class="h-48 w-full object-cover opacity-80 group-hover:opacity-100 transition">
+                <div class="p-6 flex-grow flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-2xl font-gamer text-ff-orange uppercase mb-1">Cajas de Arma Evolutiva</h3>
+                        <p class="text-gray-400 text-sm">Prueba tu suerte y consigue lo mejor.</p>
+                    </div>
+                    <div class="flex justify-between items-center mt-4">
+                        <!-- 🟢 Precio visual -->
+                        <span class="text-xl font-bold text-green-400">$8.00 <span class="text-xs text-gray-500 font-normal">c/u</span></span>
+                        <!-- 🟢 Precio real para el carrito -->
+                        <button onclick="prepararCompra('Cajas Arma Evolutiva', 8)" class="bg-ff-orange hover:bg-orange-600 text-white px-4 py-2 rounded font-bold uppercase text-sm flex items-center gap-2"><i class="fas fa-cart-plus"></i> Comprar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🟢 5. PASE BOOYAH -->
+            <div class="bg-ff-card border border-gray-700 rounded-xl overflow-hidden hover:border-ff-orange transition-colors group flex flex-col h-96">
+                <img src="./img/pase.webp" onerror="this.src='https://images.unsplash.com/photo-1623934199716-4171dc01ce95?auto=format&fit=crop&w=500&q=80'" alt="Pase Booyah" class="h-48 w-full object-cover opacity-80 group-hover:opacity-100 transition">
+                <div class="p-6 flex-grow flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-2xl font-gamer text-ff-orange uppercase mb-1">Pase Booyah</h3>
+                        <p class="text-gray-400 text-sm">Desbloquea recompensas exclusivas de temporada.</p>
+                    </div>
+                    <div class="flex justify-between items-center mt-4">
+                        <!-- 🟢 Precio visual -->
+                        <span class="text-xl font-bold text-green-400">$40.00 <span class="text-xs text-gray-500 font-normal">c/u</span></span>
+                        <!-- 🟢 Precio real para el carrito -->
+                        <button onclick="prepararCompra('Pase Booyah', 40)" class="bg-ff-orange hover:bg-orange-600 text-white px-4 py-2 rounded font-bold uppercase text-sm flex items-center gap-2"><i class="fas fa-cart-plus"></i> Comprar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🟢 6. LIKES PARA CUENTAS DE FREE FIRE (Flip Card Nueva Modalidad) -->
+            <div class="flip-card h-96 group" onclick="this.classList.toggle('flipped')">
+                <div class="flip-card-inner shadow-xl rounded-xl">
+                    <!-- Frente de la Tarjeta -->
+                    <div class="flip-card-front bg-ff-card border border-gray-700 flex flex-col">
+                        <!-- 🟢 Imagen del producto: cambia el './img/like.jpg' -->
+                        <img src="./img/like.jpg" onerror="this.src='https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=500&q=80'" alt="Likes para cuenta" class="h-48 w-full object-cover rounded-t-xl opacity-80 group-hover:opacity-100 transition">
+                        <div class="p-6 flex-grow flex flex-col justify-center">
+                            <h3 class="text-2xl font-gamer text-ff-orange uppercase mb-2">Likes para cuentas de free fire</h3>
+                            <p class="text-gray-400 text-sm">Aumenta la popularidad de tu cuenta rápidamente.</p>
+                            <div class="mt-4 text-ff-yellow animate-pulse text-sm font-bold flex items-center justify-center gap-2">
+                                <i class="fas fa-hand-pointer"></i> Toca para ver precios
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Reverso de la Tarjeta (PRECIOS) -->
+                    <div class="flip-card-back p-4 relative" onclick="event.stopPropagation()">
+                        <button onclick="this.closest('.flip-card').classList.remove('flipped')" class="absolute top-2 right-2 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+                        <h3 class="text-2xl font-gamer text-ff-orange uppercase mb-4 border-b border-gray-700 pb-2">Selecciona un Paquete</h3>
+                        <div class="flex flex-col gap-2 overflow-y-auto pr-2 pb-2">
+                            <!-- 🟢 COMENTARIO: Precios de los likes configurados aquí. 
+                                 El primer valor es el nombre que irá al carrito, el segundo es el precio matemático -->
+                            <button onclick="prepararCompra('1500 Likes para cuenta', 86)" class="bg-gray-800 hover:bg-gray-700 border border-pink-500 rounded p-2 flex justify-between items-center transition"><span>1500 <i class="fas fa-heart text-pink-400"></i></span> <span class="text-green-400 font-bold">$86</span></button>
+                            <button onclick="prepararCompra('3000 Likes para cuenta', 122)" class="bg-gray-800 hover:bg-gray-700 border border-pink-500 rounded p-2 flex justify-between items-center transition"><span>3000 <i class="fas fa-heart text-pink-400"></i></span> <span class="text-green-400 font-bold">$122</span></button>
+                            <button onclick="prepararCompra('4500 Likes para cuenta', 145)" class="bg-gray-800 hover:bg-gray-700 border border-pink-500 rounded p-2 flex justify-between items-center transition"><span>4500 <i class="fas fa-heart text-pink-400"></i></span> <span class="text-green-400 font-bold">$145</span></button>
+                            <button onclick="prepararCompra('6000 Likes para cuenta', 180)" class="bg-gray-800 hover:bg-gray-700 border border-pink-500 rounded p-2 flex justify-between items-center transition"><span>6000 <i class="fas fa-heart text-pink-400"></i></span> <span class="text-green-400 font-bold">$180</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ============================================== -->
+    <!-- 🟢 PIE DE PÁGINA (FOOTER)                      -->
+    <!-- Cambia aquí los links a tus grupos de Facebook,-->
+    <!-- WhatsApp y números de contacto.                -->
+    <!-- ============================================== -->
+    <footer id="contacto" class="bg-gray-900 border-t border-gray-800 mt-12 pt-12 pb-6 relative z-10">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 text-center md:text-left">
+            <div>
+                <h4 class="text-xl font-gamer text-ff-orange uppercase mb-4">Acerca de Nosotros</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">Gil ROM Store es tu proveedor de confianza para recargas y servicios de Free Fire. Rapidez, seguridad y los mejores precios del mercado.</p>
+            </div>
+            <div>
+                <h4 class="text-xl font-gamer text-ff-orange uppercase mb-4">Comunidad y Redes</h4>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <!-- 🟢 COMENTARIO: Enlace a Grupo de Facebook -->
+                    <li><a href="https://www.facebook.com/groups/1934597717480302/?ref=share&mibextid=NSMWBT" target="_blank" class="hover:text-ff-orange transition"><i class="fab fa-facebook-square mr-2"></i>Grupo de Facebook</a></li>
+                    <!-- 🟢 COMENTARIO: Enlace a Referencias -->
+                    <li><a href="https://www.facebook.com/share/p/18xPmd6RQt/" target="_blank" class="hover:text-ff-orange transition"><i class="fas fa-star mr-2"></i>Referencias de Clientes</a></li>
+                    <!-- 🟢 COMENTARIO: Enlace a Grupo de WhatsApp -->
+                    <li><a href="https://chat.whatsapp.com/JBplcfHKASv1PkDz7gB1ut?s=cl&p=a&mlu=3" target="_blank" class="hover:text-ff-orange transition"><i class="fab fa-whatsapp mr-2"></i>Grupo de WhatsApp</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-xl font-gamer text-ff-orange uppercase mb-4">Atención al Cliente</h4>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <!-- 🟢 COMENTARIO: Número visible en el footer -->
+                    <li><i class="fab fa-whatsapp mr-2 text-green-400"></i> +52 722 850 0410</li>
+                    <li><button onclick="abrirModal('modal-terminos')" class="hover:text-ff-orange transition underline"><i class="fas fa-file-contract mr-2"></i>Términos y Condiciones</button></li>
+                </ul>
+            </div>
+        </div>
+        <!-- 🟢 COMENTARIO: Créditos del desarrollador (Texto pequeño al final) -->
+        <div class="text-center border-t border-gray-800 pt-6">
+            <p class="text-[10px] text-gray-600 max-w-4xl mx-auto">Sitio web diseñado y desarrollado por Carlos La Rosa. El creador provee exclusivamente la infraestructura tecnológica, eximiéndose de toda responsabilidad sobre las transacciones, servicios y operaciones comerciales derivadas de esta plataforma. Para cotizar servicios de desarrollo web, contáctame <a href="https://carloslarosa.netlify.app/" target="_blank" class="text-ff-orange hover:underline font-bold">Aquí</a>.</p>
+        </div>
+    </footer>
+
+    <!-- ============================================== -->
+    <!-- 🟢 MODALES (VENTANAS EMERGENTES)               -->
+    <!-- No modifiques mucho la estructura aquí para    -->
+    <!-- evitar dañar el funcionamiento, solo textos.   -->
+    <!-- ============================================== -->
+
+    <!-- Modal: Agregar al Carrito (AQUÍ PIDE LA ID) -->
+    <div id="modal-agregar" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4" onclick="cerrarModalFuera(event, 'modal-agregar')">
+        <div class="modal-content bg-gray-900 border border-ff-orange rounded-xl p-6 w-full max-w-md relative shadow-[0_0_30px_rgba(255,94,0,0.2)]">
+            <button onclick="cerrarModal('modal-agregar')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl"><i class="fas fa-times"></i></button>
+            <h3 class="text-3xl font-gamer text-ff-orange uppercase mb-4 text-center border-b border-gray-700 pb-2" id="add-item-name">Nombre del Producto</h3>
+            
+            <div class="space-y-4 mt-4">
+                <div class="flex justify-between text-gray-300">
+                    <span>Precio Unitario:</span>
+                    <span class="text-green-400 font-bold" id="add-item-price">$0.00</span>
+                </div>
+                
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">ID del Jugador <span class="text-red-500">*</span></label>
+                    <input type="text" id="add-item-id" placeholder="Ej: 123456789" class="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-ff-orange focus:ring-1 focus:ring-ff-orange">
+                </div>
+
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Cantidad</label>
+                    <div class="flex items-center gap-4 bg-gray-800 border border-gray-600 rounded p-1">
+                        <button onclick="modificarCantidadAdd(-1)" class="w-10 h-10 bg-gray-700 rounded hover:bg-gray-600 text-white font-bold">-</button>
+                        <input type="number" id="add-item-qty" value="1" min="1" class="w-full bg-transparent text-center text-xl text-white font-bold outline-none" onchange="calcularTotalAdd()" readonly>
+                        <button onclick="modificarCantidadAdd(1)" class="w-10 h-10 bg-gray-700 rounded hover:bg-gray-600 text-white font-bold">+</button>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center text-xl border-t border-gray-700 pt-4 mt-2">
+                    <span class="font-bold">Total:</span>
+                    <span class="text-green-400 font-bold text-2xl" id="add-item-total">$0.00</span>
+                </div>
+
+                <button onclick="agregarAlCarrito()" class="w-full bg-ff-orange hover:bg-orange-600 text-white font-bold py-3 rounded-lg text-lg uppercase transition shadow-lg mt-4">
+                    Agregar al Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Carrito lateral -->
+    <div id="modal-carrito" class="modal-overlay fixed inset-0 z-50 flex justify-end bg-black/60" onclick="cerrarModalFuera(event, 'modal-carrito')">
+        <div class="modal-content bg-gray-900 border-l border-ff-orange h-full w-full max-w-md p-6 relative flex flex-col shadow-[-10px_0_30px_rgba(0,0,0,0.5)]" onclick="event.stopPropagation()">
+            <button onclick="cerrarModal('modal-carrito')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl"><i class="fas fa-times"></i></button>
+            <h3 class="text-3xl font-gamer text-ff-orange uppercase mb-4 border-b border-gray-700 pb-2"><i class="fas fa-shopping-cart mr-2"></i>Tu Pedido</h3>
+            
+            <div id="cart-items" class="flex-grow overflow-y-auto space-y-4 pr-2">
+                <!-- Los ítems del carrito se generan por JavaScript aquí -->
+                <div class="text-center text-gray-500 mt-10">Tu carrito está vacío.</div>
+            </div>
+
+            <div class="border-t border-gray-700 pt-4 mt-4">
+                <div class="flex justify-between items-center text-xl mb-4">
+                    <span class="font-bold text-gray-300">Total a Pagar:</span>
+                    <span class="text-green-400 font-bold text-3xl" id="cart-total-price">$0.00</span>
+                </div>
+                
+                <div class="text-center mb-2">
+                    <button onclick="abrirModal('modal-terminos')" class="text-xs text-gray-400 hover:text-ff-orange underline">Términos y condiciones</button>
+                </div>
+                
+                <button onclick="iniciarCheckout()" id="btn-continuar-compra" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg text-lg uppercase transition shadow-[0_0_15px_rgba(34,197,94,0.4)] disabled:opacity-50 disabled:cursor-not-allowed">
+                    Continuar Compra <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Checkout Paso 1 (Formulario de Datos) -->
+    <div id="modal-checkout-1" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4" onclick="cerrarModalFuera(event, 'modal-checkout-1')">
+        <div class="modal-content bg-gray-900 border border-green-500 rounded-xl p-6 w-full max-w-md relative">
+            <button onclick="cerrarModal('modal-checkout-1')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl"><i class="fas fa-times"></i></button>
+            <h3 class="text-2xl font-gamer text-green-400 uppercase mb-4 text-center border-b border-gray-700 pb-2">Datos de Contacto</h3>
+            
+            <div class="space-y-4 mt-4">
+                <p class="text-sm text-gray-300 mb-2">Por favor, ingresa tus datos para procesar el pedido.</p>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Nombre Completo <span class="text-red-500">*</span></label>
+                    <input type="text" id="chk-nombre" class="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Número de WhatsApp <span class="text-red-500">*</span></label>
+                    <input type="tel" id="chk-whatsapp" placeholder="+52..." class="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-green-500">
+                </div>
+
+                <button onclick="irPasoPago()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg text-lg uppercase transition mt-6">
+                    Siguiente: Método de Pago
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 🟢 Modal: Checkout Paso 2 (DATOS BANCARIOS)    -->
+    <!-- Si necesitas cambiar el número de cuenta o     -->
+    <!-- el nombre, es justo aquí abajo.                -->
+    <!-- ============================================== -->
+    <div id="modal-checkout-2" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4" onclick="cerrarModalFuera(event, 'modal-checkout-2')">
+        <div class="modal-content bg-gray-900 border border-green-500 rounded-xl p-6 w-full max-w-md relative overflow-y-auto max-h-[90vh]">
+            <button onclick="cerrarModal('modal-checkout-2')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl"><i class="fas fa-times"></i></button>
+            <button onclick="volverPasoDatos()" class="absolute top-4 left-4 text-gray-400 hover:text-white text-xl"><i class="fas fa-arrow-left"></i></button>
+            <h3 class="text-2xl font-gamer text-green-400 uppercase mb-4 text-center border-b border-gray-700 pb-2 mt-2">Realizar Pago</h3>
+            
+            <div class="space-y-6 mt-4">
+                <div class="bg-red-900/30 border border-red-500 text-red-200 p-3 rounded text-sm text-center flex flex-col items-center gap-2">
+                    <i class="fas fa-exclamation-triangle text-2xl text-red-500"></i>
+                    <p>¡ATENCIÓN! Debes realizar el pago y <strong class="text-white">TOMAR CAPTURA DE PANTALLA (COMPROBANTE)</strong> antes de enviar el mensaje.</p>
+                </div>
+
+                <!-- 🟢 COMENTARIO: Datos de Transferencia -->
+                <div class="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                    <h4 class="text-ff-orange font-bold mb-2 flex justify-between"><span><i class="fas fa-university mr-2"></i> Transferencia</span></h4>
+                    <p class="text-sm text-gray-300"><strong>Cuenta:</strong> <span class="select-all bg-gray-900 px-1 rounded text-white">722969020743597897</span></p>
+                    <p class="text-sm text-gray-300"><strong>Nombre:</strong> Gilberto Nahuat</p>
+                    <p class="text-sm text-gray-300"><strong>Concepto:</strong> Pago</p>
+                </div>
+
+                <!-- 🟢 COMENTARIO: Datos de Spin Oxxo -->
+                <div class="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                    <h4 class="text-ff-orange font-bold mb-2 flex justify-between"><span><i class="fas fa-store mr-2"></i> Depósito Spin Oxxo</span></h4>
+                    <p class="text-sm text-gray-300"><strong>Cuenta:</strong> <span class="select-all bg-gray-900 px-1 rounded text-white">4217470191323043</span></p>
+                </div>
+
+                <div class="text-center font-bold text-xl">
+                    Total a pagar: <span id="final-total-display" class="text-green-400"></span>
+                </div>
+
+                <button onclick="enviarPedidoWhatsApp()" class="w-full bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold py-4 rounded-lg text-lg uppercase transition shadow-lg flex items-center justify-center gap-2">
+                    <i class="fab fa-whatsapp text-2xl"></i> Enviar Pedido a WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🟢 Modal: Términos y Condiciones -->
+    <div id="modal-terminos" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4 py-6" onclick="cerrarModalFuera(event, 'modal-terminos')">
+        <div class="modal-content bg-gray-900 border border-gray-600 rounded-xl p-6 w-full max-w-2xl relative flex flex-col max-h-full">
+            <button onclick="cerrarModal('modal-terminos')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl z-10"><i class="fas fa-times"></i></button>
+            <h3 class="text-3xl font-gamer text-ff-orange uppercase mb-4 border-b border-gray-700 pb-2">Términos y Condiciones</h3>
+            
+            <div class="text-sm text-gray-300 space-y-5 overflow-y-auto pr-4 flex-grow">
+                <p>Al realizar una compra en Gil ROM Store, el cliente acepta automáticamente los siguientes términos y condiciones. Te rogamos leerlos detenidamente antes de realizar cualquier pago.</p>
+                
+                <div>
+                    <h4 class="text-white font-bold mb-1">1. Política de Reembolsos y Devoluciones (ESTRICTA)</h4>
+                    <p>Todas las ventas realizadas en Gil ROM Store son definitivas. Debido a la naturaleza digital e intangible de los servicios que ofrecemos (recargas de diamantes, pases, fragmentos, likes, etc.), <strong class="text-red-400">NO SE ACEPTAN DEVOLUCIONES, REEMBOLSOS NI CANCELACIONES</strong> bajo ninguna circunstancia una vez que el pago ha sido recibido y el servicio ha sido procesado o enviado a la cuenta indicada.</p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-1">2. Responsabilidad sobre el ID del Jugador</h4>
+                    <p>El cliente es única y exclusivamente responsable de proporcionar el ID (Identificador de Jugador) correcto al momento de realizar su pedido.</p>
+                    <ul class="list-disc pl-5 mt-1 space-y-1">
+                        <li>Si el cliente proporciona un ID erróneo y la recarga se envía a otra cuenta, Gil ROM Store no se hace responsable por la pérdida y no se realizará ningún tipo de reembolso o reposición del servicio.</li>
+                        <li>Te recomendamos verificar tu ID al menos dos veces antes de enviarnos el mensaje por WhatsApp.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-1">3. Tiempos de Entrega</h4>
+                    <p>Nuestro tiempo de entrega estimado estándar es de 5 a 15 minutos una vez que el pago ha sido confirmado por nuestro equipo de soporte. Sin embargo, los tiempos pueden prolongarse en caso de:</p>
+                    <ul class="list-disc pl-5 mt-1 space-y-1">
+                        <li>Saturación en los servidores del juego (Garena).</li>
+                        <li>Mantenimiento de las plataformas de recarga.</li>
+                        <li>Horarios fuera de nuestra jornada de atención habitual.</li>
+                    </ul>
+                    <p class="mt-1">Agradecemos tu paciencia; garantizamos que todo pedido pagado será entregado.</p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-1">4. Proceso y Comprobación de Pago</h4>
+                    <p>Para que un pedido sea procesado, es un requisito obligatorio y sin excepciones enviar el comprobante de pago (captura de pantalla legible o foto del ticket) a nuestro número oficial de WhatsApp. No procesaremos recargas basadas únicamente en la palabra del cliente hasta que el dinero se refleje en nuestras cuentas.</p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-1">5. Modificación de Precios</h4>
+                    <p>Los precios de nuestro catálogo están sujetos a cambios sin previo aviso. Estos ajustes pueden ocurrir debido a variaciones en el tipo de cambio, actualizaciones en las políticas del proveedor o cambios directos impuestos por los desarrolladores del juego. El precio final a pagar será siempre el que se confirme vía WhatsApp al momento de tu compra.</p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-1">6. Seguridad de la Cuenta</h4>
+                    <p>Garantizamos que todos nuestros servicios se realizan a través de métodos 100% legales y oficiales. No solicitamos contraseñas ni datos de acceso a tu cuenta (únicamente tu ID público), por lo que tu cuenta está segura y libre de riesgo de baneo por el uso de nuestros servicios.</p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-1">7. Privacidad y Protección de Datos Personales</h4>
+                    <p>En estricto apego a la <em class="text-gray-100">Ley Federal de Protección de Datos Personales en Posesión de los Particulares</em> vigente en los Estados Unidos Mexicanos, Gil ROM Store garantiza la total confidencialidad de su información. Los datos proporcionados por el cliente (tales como Nombre, Número de WhatsApp e ID de Jugador) serán recabados y tratados única y exclusivamente para el procesamiento, facturación, seguimiento y entrega del servicio solicitado. Bajo ninguna circunstancia su información personal será compartida, vendida, cedida o utilizada para fines publicitarios de terceros ajenos a la operación de esta tienda.</p>
+                </div>
+            </div>
+            
+            <div class="mt-4 border-t border-gray-700 pt-4">
+                <button onclick="cerrarModal('modal-terminos')" class="w-full bg-ff-orange hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition text-lg uppercase tracking-wider">Aceptar y Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 🟢 SCRIPTS DE LÓGICA (JAVASCRIPT)              -->
+    <!-- ============================================== -->
+    <script>
+        // --- Variables Globales ---
+        let cart = [];
+        let itemActual = { nombre: '', precio: 0, cantidad: 1 };
+        
+        // 🟢 COMENTARIO MUY IMPORTANTE: Cambia aquí el número de teléfono al que llegarán los pedidos.
+        // Debe ser formato internacional sin el "+" (ej. 52 para México, seguido de los 10 dígitos)
+        const NUMERO_VENDEDOR = "527228500410";
+
+        // --- Funciones de Utilidad (Abrir y Cerrar Modales) ---
+        function abrirModal(id) { document.getElementById(id).classList.add('active'); }
+        function cerrarModal(id) { document.getElementById(id).classList.remove('active'); }
+        function cerrarModalFuera(event, id) { if (event.target.id === id) { cerrarModal(id); } }
+        function cerrarIntro() {
+            const intro = document.getElementById('intro-screen');
+            intro.classList.add('fade-out');
+            setTimeout(() => { intro.style.display = 'none'; }, 800);
+        }
+
+        // Auto cerrar intro después de 3 segundos
+        setTimeout(() => {
+            if(document.getElementById('intro-screen').style.display !== 'none') cerrarIntro();
+        }, 3000);
+
+        // --- Lógica: Preparar compra y abrir el modal del carrito ---
+        function prepararCompra(nombre, precio) {
+            itemActual = { nombre, precio, cantidad: 1 };
+            
+            // Llenar los datos en el modal de "Agregar al Pedido"
+            document.getElementById('add-item-name').innerText = nombre;
+            document.getElementById('add-item-price').innerText = `$${precio.toFixed(2)}`;
+            document.getElementById('add-item-qty').value = 1;
+            document.getElementById('add-item-id').value = '';
+            calcularTotalAdd();
+            
+            abrirModal('modal-agregar');
+            
+            // Cierra las tarjetas giradas (Flip cards) para que no estorben
+            document.querySelectorAll('.flip-card').forEach(card => card.classList.remove('flipped'));
+        }
+
+        // --- Lógica: Modificar cantidad en el modal de agregar ---
+        function modificarCantidadAdd(delta) {
+            let qtyInput = document.getElementById('add-item-qty');
+            let nuevaCant = parseInt(qtyInput.value) + delta;
+            if (nuevaCant >= 1) {
+                qtyInput.value = nuevaCant;
+                itemActual.cantidad = nuevaCant;
+                calcularTotalAdd();
+            }
+        }
+
+        // --- Lógica: Calcular precio x cantidad antes de agregar ---
+        function calcularTotalAdd() {
+            let total = itemActual.precio * itemActual.cantidad;
+            document.getElementById('add-item-total').innerText = `$${total.toFixed(2)}`;
+        }
+
+        // --- Lógica: Guardar ítem en el carrito ---
+        function agregarAlCarrito() {
+            const idInput = document.getElementById('add-item-id').value.trim();
+            if (!idInput) {
+                alert("Por favor, ingresa el ID del jugador.");
+                return;
+            }
+
+            // Crear el objeto del ítem
+            const nuevoItem = {
+                idLista: Date.now(),
+                nombre: itemActual.nombre,
+                precioUnitario: itemActual.precio,
+                cantidad: itemActual.cantidad,
+                total: itemActual.precio * itemActual.cantidad,
+                jugadorID: idInput
+            };
+
+            cart.push(nuevoItem); // Guarda en la lista "cart"
+            actualizarUI_Carrito(); // Refresca visualmente el carrito
+            cerrarModal('modal-agregar');
+            
+            // Animación pequeña en el botón del carrito
+            const badge = document.getElementById('cart-badge');
+            badge.classList.add('scale-150');
+            setTimeout(() => badge.classList.remove('scale-150'), 300);
+        }
+
+        // --- Lógica: Actualizar los elementos visuales del Carrito ---
+        function actualizarUI_Carrito() {
+            const contenedor = document.getElementById('cart-items');
+            const badge = document.getElementById('cart-badge');
+            const totalDisplay = document.getElementById('cart-total-price');
+            const btnContinuar = document.getElementById('btn-continuar-compra');
+
+            contenedor.innerHTML = '';
+            let sumaTotal = 0;
+
+            if (cart.length === 0) {
+                contenedor.innerHTML = '<div class="text-center text-gray-500 mt-10">Tu carrito está vacío.</div>';
+                badge.classList.add('hidden');
+                totalDisplay.innerText = '$0.00';
+                btnContinuar.disabled = true;
+                return;
+            }
+
+            btnContinuar.disabled = false;
+            badge.classList.remove('hidden');
+            badge.innerText = cart.length;
+
+            cart.forEach((item, index) => {
+                sumaTotal += item.total;
+                contenedor.innerHTML += `
+                    <div class="bg-gray-800 p-3 rounded-lg border border-gray-700 relative">
+                        <button onclick="eliminarItem(${index})" class="absolute top-2 right-2 text-red-400 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                        <h4 class="text-ff-orange font-bold text-sm pr-6">${item.nombre}</h4>
+                        <p class="text-xs text-gray-400 mb-2">ID: <span class="text-white">${item.jugadorID}</span> | C/U: $${item.precioUnitario.toFixed(2)}</p>
+                        
+                        <div class="flex justify-between items-center mt-2">
+                            <div class="flex items-center gap-2 bg-gray-900 rounded p-1 border border-gray-600">
+                                <button onclick="editarCantidadCart(${index}, -1)" class="w-6 h-6 flex justify-center items-center bg-gray-700 rounded hover:bg-gray-600 text-white text-xs">-</button>
+                                <span class="text-sm font-bold w-4 text-center">${item.cantidad}</span>
+                                <button onclick="editarCantidadCart(${index}, 1)" class="w-6 h-6 flex justify-center items-center bg-gray-700 rounded hover:bg-gray-600 text-white text-xs">+</button>
+                            </div>
+                            <span class="text-green-400 font-bold">$${item.total.toFixed(2)}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            totalDisplay.innerText = `$${sumaTotal.toFixed(2)}`;
+            document.getElementById('final-total-display').innerText = `$${sumaTotal.toFixed(2)}`;
+        }
+
+        // --- Lógica: Editar o eliminar dentro del carrito ---
+        function editarCantidadCart(index, delta) {
+            let nuevaCant = cart[index].cantidad + delta;
+            if (nuevaCant >= 1) {
+                cart[index].cantidad = nuevaCant;
+                cart[index].total = cart[index].cantidad * cart[index].precioUnitario;
+                actualizarUI_Carrito();
+            }
+        }
+        function eliminarItem(index) {
+            cart.splice(index, 1);
+            actualizarUI_Carrito();
+        }
+
+        // --- Lógica: Proceso de pago (Checkout) ---
+        function iniciarCheckout() {
+            if(cart.length === 0) return;
+            cerrarModal('modal-carrito');
+            abrirModal('modal-checkout-1');
+        }
+
+        function irPasoPago() {
+            const nombre = document.getElementById('chk-nombre').value.trim();
+            const whatsapp = document.getElementById('chk-whatsapp').value.trim();
+
+            if(!nombre || !whatsapp) {
+                alert("Por favor, llena tu nombre y número de WhatsApp para continuar.");
+                return;
+            }
+
+            cerrarModal('modal-checkout-1');
+            abrirModal('modal-checkout-2');
+        }
+
+        function volverPasoDatos() {
+            cerrarModal('modal-checkout-2');
+            abrirModal('modal-checkout-1');
+        }
+
+        // --- Lógica: Envío a WhatsApp ---
+        function enviarPedidoWhatsApp() {
+            const nombre = document.getElementById('chk-nombre').value.trim();
+            const whatsapp = document.getElementById('chk-whatsapp').value.trim();
+            
+            let sumaTotal = 0;
+            let desglosePedido = "";
+
+            cart.forEach(item => {
+                sumaTotal += item.total;
+                // 🟢 COMENTARIO: Formato de la lista de productos
+                desglosePedido += `(${item.cantidad}) ${item.nombre} ($${item.precioUnitario.toFixed(2)} c/u) Total: $${item.total.toFixed(2)}\nID que ocupa el servicio: ${item.jugadorID}\n\n`;
+            });
+
+            // 🟢 COMENTARIO: Este es el texto exacto que le llegará al vendedor por WhatsApp
+            const mensaje = `Nuevo pedido de Gil Rom
+
+Nombre: ${nombre}
+Numero de whatsapp: ${whatsapp}
+
+pedido:
+
+${desglosePedido}
+Total Final a Pagar: $${sumaTotal.toFixed(2)}
+
+Adjunto comprobante`;
+
+            // Abre WhatsApp con el mensaje pre-llenado
+            const url = `https://wa.me/${NUMERO_VENDEDOR}?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+
+        // --- Lógica: Generar Favicon Circular (Foto de pestaña) ---
+        // 🟢 COMENTARIO: Esta función convierte tu logo en un círculo perfecto para la pestaña
+        function setCircularFavicon(src) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 64;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            // Necesario para evitar problemas de CORS si la imagen estuviera en otro dominio (aunque siendo local debería funcionar)
+            img.crossOrigin = "Anonymous"; 
+            img.src = src;
+            img.onload = () => {
+                ctx.beginPath();
+                ctx.arc(32, 32, 32, 0, 2 * Math.PI);
+                ctx.clip();
+                ctx.drawImage(img, 0, 0, 64, 64);
+                let link = document.getElementById('favicon');
+                if (link) {
+                    link.href = canvas.toDataURL('image/png');
+                }
+            };
+            img.onerror = () => {
+                console.warn("No se pudo cargar el logo para el favicon circular. Verifica la ruta.");
+            }
+        }
+        // Llamamos a la función con la ruta de tu logo. 
+        setCircularFavicon('./img/logo/logo.jpg');
+    </script>
+</body>
+</html>
